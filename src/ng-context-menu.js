@@ -13,7 +13,7 @@ angular
             openTarget,
             disabled = $scope.$eval(attrs.contextMenuDisabled),
             win = angular.element($window),
-            menuElement = angular.element(document.getElementById(attrs.target)),
+            menuElement = null,
             fn = $parse(attrs.contextMenu);
 
         function open(event, element) {
@@ -28,10 +28,16 @@ angular
           element.removeClass('open');
         }
 
-        menuElement.css('position', 'absolute');
-
         element.bind('contextmenu', function(event) {
           if (!disabled) {
+            // take element here so we can use this directive in another directive
+            // if do this before, the dom is not ready because we are in another directive
+            if(menuElement == null){
+              menuElement = angular.element(document.getElementById(attrs.target));
+              // set position fixed, so we can place the div content menu anywhere
+              menuElement.css('position', 'fixed');
+            }
+            
             openTarget = event.target;
             event.preventDefault();
             event.stopPropagation();
