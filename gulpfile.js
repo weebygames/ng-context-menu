@@ -4,9 +4,7 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename');
 
-gulp.task('default', function () {
-  gulp.run('lint', 'js');
-
+gulp.task('default', ['js', 'lint', 'connect'], function () {
   gulp.watch('src/**/*.js', function (event) {
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     gulp.run('lint', 'js');
