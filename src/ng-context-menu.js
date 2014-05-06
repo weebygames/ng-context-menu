@@ -1,5 +1,5 @@
 /**
- * ng-context-menu - v0.0.9 - An AngularJS directive to display a context menu when a right-click event is triggered
+ * ng-context-menu - v0.1.0 - An AngularJS directive to display a context menu when a right-click event is triggered
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
