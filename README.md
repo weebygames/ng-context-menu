@@ -28,7 +28,7 @@ var app = angular.module('menu-demo', ['ngRoute', 'ng-context-menu'])
 </div>
 ```
 
-**Note:** Make sure your dropdown menu has ```css position: fixed```
+**Note:** Make sure your dropdown menu has the css property ```position: fixed```
 
 #### Disabling the contextmenu
 
