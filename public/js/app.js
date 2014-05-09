@@ -43,7 +43,6 @@ require(['angular', 'angular-route', 'ng-context-menu'], function(angular) {
       $scope.onRightClick = function(msg) {
         console.log(msg);
       }
-
     }
   ]);
 

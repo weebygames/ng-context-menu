@@ -5,7 +5,10 @@
  */
 angular
   .module('ng-context-menu', [])
-  .directive('contextMenu', ['$window', '$parse', function($window, $parse) {
+  .factory('ContextMenuService', function() {
+    return {};
+  })
+  .directive('contextMenu', ['$window', '$parse', 'ContextMenuService', function($window, $parse, ContextMenuService) {
     return {
       restrict: 'A',
       link: function($scope, element, attrs) {
@@ -13,8 +16,9 @@ angular
           openTarget,
           disabled = $scope.$eval(attrs.contextMenuDisabled),
           win = angular.element($window),
-          menuElement = null,
           fn = $parse(attrs.contextMenu);
+
+        ContextMenuService.menuElement = null;
 
         function open(event, element) {
           element.addClass('open');
@@ -31,8 +35,8 @@ angular
         element.bind('contextmenu', function(event) {
           if (!disabled) {
             // Make sure the DOM is set before we try to find the menu
-            if (menuElement === null) {
-              menuElement = angular.element(document.getElementById(attrs.target));
+            if (ContextMenuService.menuElement === null) {
+              ContextMenuService.menuElement = angular.element(document.getElementById(attrs.target));
             }
 
             openTarget = event.target;
@@ -40,7 +44,7 @@ angular
             event.stopPropagation();
             $scope.$apply(function() {
               fn($scope, { $event: event });
-              open(event, menuElement);
+              open(event, ContextMenuService.menuElement);
             });
           }
         });
@@ -48,7 +52,7 @@ angular
         win.bind('keyup', function(event) {
           if (!disabled && opened && event.keyCode === 27) {
             $scope.$apply(function() {
-              close(menuElement);
+              close(ContextMenuService.menuElement);
             });
           }
         });
@@ -56,7 +60,7 @@ angular
         function handleWindowClickEvent(event) {
           if (!disabled && opened && (event.button !== 2 || event.target !== openTarget)) {
             $scope.$apply(function() {
-              close(menuElement);
+              close(ContextMenuService.menuElement);
             });
           }
         }

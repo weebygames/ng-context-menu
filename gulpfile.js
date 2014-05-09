@@ -6,8 +6,9 @@ var gulp = require('gulp'),
     connect = require('gulp-connect');
 
 gulp.task('default', ['js', 'lint', 'connect'], function () {
-  gulp.watch('src/**/*.js', function (event) {
-    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  var watcher = gulp.watch('src/**/*.js', ['js', 'lint']);
+  watcher.on('change', function(event) {
+    console.log('File', event.path, 'was', event.type, ', running tasks...');
   });
 });
 
