@@ -6,7 +6,9 @@
 angular
   .module('ng-context-menu', [])
   .factory('ContextMenuService', function() {
-    return {};
+    return {
+      menuElement: null
+    };
   })
   .directive('contextMenu', ['$window', '$parse', 'ContextMenuService', function($window, $parse, ContextMenuService) {
     return {
@@ -17,8 +19,6 @@ angular
           disabled = $scope.$eval(attrs.contextMenuDisabled),
           win = angular.element($window),
           fn = $parse(attrs.contextMenu);
-
-        ContextMenuService.menuElement = null;
 
         function open(event, element) {
           element.addClass('open');
@@ -34,10 +34,10 @@ angular
 
         element.bind('contextmenu', function(event) {
           if (!disabled) {
-            // Make sure the DOM is set before we try to find the menu
-            if (ContextMenuService.menuElement === null) {
-              ContextMenuService.menuElement = angular.element(document.getElementById(attrs.target));
+            if (ContextMenuService.menuElement !== null) {
+              close(ContextMenuService.menuElement);
             }
+            ContextMenuService.menuElement = angular.element(document.getElementById(attrs.target));
 
             openTarget = event.target;
             event.preventDefault();

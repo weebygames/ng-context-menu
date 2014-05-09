@@ -24,8 +24,8 @@
     .expanded {
       height: 400px;
     }
-    .position-fixed {
-      position: fixed;
+    .position-absolute {
+      position: absolute;
     }
   </style>
 </head>
@@ -54,6 +54,44 @@
     «–– <a href="http://ianvonwalter.com">Ian</a>
   </p>
   <br>
+</div>
+<div class="dropdown position-absolute" id="myMenu">
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel1.highlight = true">Select Panel 1</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel1.highlight = false">Deselect Panel 1</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel1.expanded = true">Expand Panel 1</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel1.expanded = false">Contract Panel 1</a>
+    </li>
+    <li role="presentation">
+      <a href="https://github.com/ianwalter/ng-context-menu" role="menuitem" tabindex="-1">ng-context-menu on GitHub</a>
+    </li>
+  </ul>
+</div>
+<div class="dropdown position-absolute" id="myMenu2">
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel2.highlight = true">Select Panel 2</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel2.highlight = false">Deselect Panel 2</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel2.expanded = true">Expand Panel 2</a>
+    </li>
+    <li role="presentation">
+      <a class="pointer" role="menuitem" tabindex="-1" ng-click="panel2.expanded = false">Contract Panel 2</a>
+    </li>
+    <li role="presentation">
+      <a href="https://github.com/ianwalter/ng-context-menu" role="menuitem" tabindex="-1">ng-context-menu on GitHub</a>
+    </li>
+  </ul>
 </div>
 </body>
 </html>
