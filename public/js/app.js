@@ -1,5 +1,5 @@
 /**
- * Example application for ng-timer (https://github.com/ianwalter/ng-timer)
+ * Example application for ng-autocomplete (https://github.com/ianwalter/ng-autocomplete)
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */

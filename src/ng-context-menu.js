@@ -1,5 +1,5 @@
 /**
- * ng-context-menu - v0.1.1 - An AngularJS directive to display a context menu when a right-click event is triggered
+ * ng-context-menu - v0.1.2 - An AngularJS directive to display a context menu when a right-click event is triggered
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -10,14 +10,13 @@ angular
       menuElement: null
     };
   })
-  .directive('contextMenu', ['$window', '$parse', 'ContextMenuService', function($window, $parse, ContextMenuService) {
+  .directive('contextMenu', ['$document', '$parse', 'ContextMenuService', function($document, $parse, ContextMenuService) {
     return {
       restrict: 'A',
       link: function($scope, element, attrs) {
         var opened = false,
           openTarget,
           disabled = $scope.$eval(attrs.contextMenuDisabled),
-          win = angular.element($window),
           fn = $parse(attrs.contextMenu);
 
         function open(event, element) {
@@ -28,8 +27,8 @@ angular
         }
 
         function close(element) {
-          opened = false;
           element.removeClass('open');
+          opened = false;
         }
 
         element.bind('contextmenu', function(event) {
@@ -49,7 +48,7 @@ angular
           }
         });
 
-        win.bind('keyup', function(event) {
+        $document.bind('keyup', function(event) {
           if (!disabled && opened && event.keyCode === 27) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
@@ -57,7 +56,7 @@ angular
           }
         });
 
-        function handleWindowClickEvent(event) {
+        function handleClickEvent(event) {
           if (!disabled && opened && (event.button !== 2 || event.target !== openTarget)) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
@@ -67,8 +66,8 @@ angular
 
         // Firefox treats a right-click as a click and a contextmenu event while other browsers
         // just treat it as a contextmenu event
-        win.bind('click', handleWindowClickEvent);
-        win.bind('contextmenu', handleWindowClickEvent);
+        $document.bind('click', handleClickEvent);
+        $document.bind('contextmenu', handleClickEvent);
       }
     };
   }]);
