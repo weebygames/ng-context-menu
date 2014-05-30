@@ -10,14 +10,16 @@ angular
       menuElement: null
     };
   })
-  .directive('contextMenu', ['$document', '$parse', 'ContextMenuService', function($document, $parse, ContextMenuService) {
+  .directive('contextMenu', ['$document', 'ContextMenuService', function($document, ContextMenuService) {
     return {
       restrict: 'A',
+      scope: {
+        'callback': '&contextMenu',
+        'disabled': '&contextMenuDisabled'
+      },
       link: function($scope, element, attrs) {
         var opened = false,
-          openTarget,
-          disabled = $scope.$eval(attrs.contextMenuDisabled),
-          fn = $parse(attrs.contextMenu);
+            openTarget;
 
         function open(event, element) {
           element.addClass('open');
@@ -32,7 +34,7 @@ angular
         }
 
         element.bind('contextmenu', function(event) {
-          if (!disabled) {
+          if (!$scope.disabled()) {
             if (ContextMenuService.menuElement !== null) {
               close(ContextMenuService.menuElement);
             }
@@ -42,14 +44,14 @@ angular
             event.preventDefault();
             event.stopPropagation();
             $scope.$apply(function() {
-              fn($scope, { $event: event });
+              $scope.callback({ $event: event });
               open(event, ContextMenuService.menuElement);
             });
           }
         });
 
         $document.bind('keyup', function(event) {
-          if (!disabled && opened && event.keyCode === 27) {
+          if (!$scope.disabled() && opened && event.keyCode === 27) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
             });
@@ -57,7 +59,7 @@ angular
         });
 
         function handleClickEvent(event) {
-          if (!disabled && opened && (event.button !== 2 || event.target !== openTarget)) {
+          if (!$scope.disabled() && opened && (event.button !== 2 || event.target !== openTarget)) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
             });
