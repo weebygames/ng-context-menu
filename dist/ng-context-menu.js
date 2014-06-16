@@ -17,43 +17,41 @@ angular
         'callback': '&contextMenu',
         'disabled': '&contextMenuDisabled'
       },
-      link: function($scope, element, attrs) {
-        var opened = false,
-            openTarget;
+      link: function($scope, $element, $attrs) {
+        var opened = false;
 
-        function open(event, element) {
-          element.addClass('open');
+        function open(event, menuElement) {
+          menuElement.addClass('open');
 
           var doc = $document[0].documentElement;
           var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
-              docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
-              elementHeight = element[0].scrollHeight;
+            docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
+            elementHeight = menuElement[0].scrollHeight;
           var docHeight = doc.clientHeight + docTop,
-              totalHeight = elementHeight + event.pageY,
-              top = Math.max(event.pageY - docTop, 0);
+            totalHeight = elementHeight + event.pageY,
+            top = Math.max(event.pageY - docTop, 0);
 
           if (totalHeight > docHeight) {
             top = top - (totalHeight - docHeight);
           }
 
-          element.css('top', top + 'px');
-          element.css('left', Math.max(event.pageX - docLeft, 0) + 'px');
+          menuElement.css('top', top + 'px');
+          menuElement.css('left', Math.max(event.pageX - docLeft, 0) + 'px');
           opened = true;
         }
 
-        function close(element) {
-          element.removeClass('open');
+        function close(menuElement) {
+          menuElement.removeClass('open');
           opened = false;
         }
 
-        element.bind('contextmenu', function(event) {
+        $element.bind('contextmenu', function(event) {
           if (!$scope.disabled()) {
             if (ContextMenuService.menuElement !== null) {
               close(ContextMenuService.menuElement);
             }
-            ContextMenuService.menuElement = angular.element(document.getElementById(attrs.target));
+            ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
 
-            openTarget = event.target;
             event.preventDefault();
             event.stopPropagation();
             $scope.$apply(function() {
@@ -73,8 +71,9 @@ angular
         }
 
         function handleClickEvent(event) {
-          //console.log('click');
-          if (!$scope.disabled() && opened && (event.button !== 2 || event.target !== openTarget)) {
+          if (!$scope.disabled() &&
+            opened &&
+            (event.button !== 2 || event.target.parent !== ContextMenuService.menuElement[0])) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
             });
