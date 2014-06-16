@@ -23,8 +23,13 @@ angular
 
         function open(event, element) {
           element.addClass('open');
-          element.css('top', Math.max(event.pageY, 0) + 'px');
-          element.css('left', Math.max(event.pageX, 0) + 'px');
+
+          var doc = $document[0].documentElement;
+          var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+          var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
+          element.css('top', Math.max(event.pageY - top, 0) + 'px');
+          element.css('left', Math.max(event.pageX - left, 0) + 'px');
           opened = true;
         }
 
@@ -50,15 +55,17 @@ angular
           }
         });
 
-        $document.bind('keyup', function(event) {
+        function handleKeyUpEvent(event) {
+          //console.log('keyup');
           if (!$scope.disabled() && opened && event.keyCode === 27) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
             });
           }
-        });
+        }
 
         function handleClickEvent(event) {
+          //console.log('click');
           if (!$scope.disabled() && opened && (event.button !== 2 || event.target !== openTarget)) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
@@ -66,10 +73,18 @@ angular
           }
         }
 
+        $document.bind('keyup', handleKeyUpEvent);
         // Firefox treats a right-click as a click and a contextmenu event while other browsers
         // just treat it as a contextmenu event
         $document.bind('click', handleClickEvent);
         $document.bind('contextmenu', handleClickEvent);
+
+        $scope.$on('$destroy', function() {
+          //console.log('destroy');
+          $document.unbind('keyup', handleKeyUpEvent);
+          $document.unbind('click', handleClickEvent);
+          $document.unbind('contextmenu', handleClickEvent);
+        });
       }
     };
   }]);

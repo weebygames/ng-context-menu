@@ -40,8 +40,23 @@ require(['angular', 'angular-route', 'ng-context-menu'], function(angular) {
     function($scope) {
       $scope.message  = 'Right click triggered';
 
+      $scope.panels = [
+        { name: 'Panel 1' },
+        { name: 'Panel 2' },
+        { name: 'Panel 3' }
+      ];
+
+      $scope.addPanel = function() {
+        $scope.panels.push({ name: 'Panel ' + ($scope.panels.length + 1) });
+      };
+
       $scope.onRightClick = function(msg) {
         console.log(msg);
+      };
+
+      $scope.recreatePanels = function() {
+        $scope.panels = angular.copy($scope.panels);
+        console.log($scope.panels);
       }
     }
   ]);

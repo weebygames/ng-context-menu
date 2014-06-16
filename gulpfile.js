@@ -21,12 +21,13 @@ gulp.task('js', function() {
   }
   jsTask
     .pipe(rename('ng-context-menu.min.js'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist'))
+    .pipe(connect.reload());
 });
 
 gulp.task('connect', function() {
-  gulp.watch(['public/**/*', 'index.html'], function() {
-    gulp.src(['public/**/*', 'index.html'])
+  gulp.watch(['index.html'], function() {
+    gulp.src(['index.html'])
       .pipe(connect.reload());
   });
 
