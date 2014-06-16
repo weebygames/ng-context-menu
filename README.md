@@ -30,10 +30,15 @@ var app = angular.module('menu-demo', ['ngRoute', 'ng-context-menu'])
 </div>
 ```
 
-**Note:** The position of the dropdown menu can get a little out of whack if you place the dropdown menu in a container
-with padding/margin/etc so it's best to place it as a direct child of the body element as is shown in this example.
-You could also use the css property ```position: fixed``` but then it won't expand the window if the dropdown menu is
-triggered at the bottom of the window and needs more space.
+#### Step 4: Make sure your menu is has the ```position: fixed``` CSS property
+
+As you can see in the demo, I just created a class called position-fixed and added the property:
+
+```css
+.position-fixed {
+  position: fixed;
+}
+```
 
 #### Disabling the contextmenu
 

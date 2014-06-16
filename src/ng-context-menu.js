@@ -25,11 +25,19 @@ angular
           element.addClass('open');
 
           var doc = $document[0].documentElement;
-          var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-          var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+          var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
+              docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
+              elementHeight = element[0].scrollHeight;
+          var docHeight = doc.clientHeight + docTop,
+              totalHeight = elementHeight + event.pageY,
+              top = Math.max(event.pageY - docTop, 0);
 
-          element.css('top', Math.max(event.pageY - top, 0) + 'px');
-          element.css('left', Math.max(event.pageX - left, 0) + 'px');
+          if (totalHeight > docHeight) {
+            top = top - (totalHeight - docHeight);
+          }
+
+          element.css('top', top + 'px');
+          element.css('left', Math.max(event.pageX - docLeft, 0) + 'px');
           opened = true;
         }
 
