@@ -7,6 +7,7 @@ angular
   .module('ng-context-menu', [])
   .factory('ContextMenuService', function() {
     return {
+      element: null,
       menuElement: null
     };
   })
@@ -51,6 +52,8 @@ angular
               close(ContextMenuService.menuElement);
             }
             ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
+            ContextMenuService.element = event.target;
+            console.log('set', ContextMenuService.element);
 
             event.preventDefault();
             event.stopPropagation();
@@ -73,7 +76,7 @@ angular
         function handleClickEvent(event) {
           if (!$scope.disabled() &&
             opened &&
-            (event.button !== 2 || event.target.parent !== ContextMenuService.menuElement[0])) {
+            (event.button !== 2 || event.target !== ContextMenuService.element)) {
             $scope.$apply(function() {
               close(ContextMenuService.menuElement);
             });
