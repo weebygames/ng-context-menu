@@ -53,7 +53,7 @@ angular
             }
             ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
             ContextMenuService.element = event.target;
-            console.log('set', ContextMenuService.element);
+            //console.log('set', ContextMenuService.element);
 
             event.preventDefault();
             event.stopPropagation();
