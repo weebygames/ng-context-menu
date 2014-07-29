@@ -1,5 +1,5 @@
 /**
- * ng-context-menu - v0.1.4 - An AngularJS directive to display a context menu when a right-click event is triggered
+ * ng-context-menu - v0.1.6 - An AngularJS directive to display a context menu when a right-click event is triggered
  *
  * @author Ian Kennington Walter (http://ianvonwalter.com)
  */
@@ -27,17 +27,25 @@ angular
           var doc = $document[0].documentElement;
           var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
             docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
+            elementWidth = menuElement[0].scrollWidth,
             elementHeight = menuElement[0].scrollHeight;
-          var docHeight = doc.clientHeight + docTop,
+          var docWidth = doc.clientWidth + docLeft,
+            docHeight = doc.clientHeight + docTop,
+            totalWidth = elementWidth + event.pageX,
             totalHeight = elementHeight + event.pageY,
+            left = Math.max(event.pageX - docLeft, 0),
             top = Math.max(event.pageY - docTop, 0);
+
+          if (totalWidth > docWidth) {
+            left = left - (totalWidth - docWidth);
+          }
 
           if (totalHeight > docHeight) {
             top = top - (totalHeight - docHeight);
           }
 
           menuElement.css('top', top + 'px');
-          menuElement.css('left', Math.max(event.pageX - docLeft, 0) + 'px');
+          menuElement.css('left', left + 'px');
           opened = true;
         }
 
