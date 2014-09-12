@@ -1,36 +1,44 @@
 <h3>Demo:</h3>
 <br>
 <div ng-repeat="panel in panels">
-  <div context-menu="onRightClick(message);" class="panel panel-default" data-target="myMenu{{ $index }}"
+  <div context-menu="onRightClick(message);" class="panel panel-default"
+       data-target="myMenu{{ $index }}"
        ng-class="{ 'highlight': panel.highlight, 'expanded': panel.expanded }">
     <div class="panel-body">
-      <strong ng-bind="panel.name"></strong> (Right-click anywhere within this panel)
+      <strong ng-bind="panel.name"></strong>
+      (Right-click anywhere within this panel)
     </div>
   </div>
   <div class="dropdown position-fixed" id="myMenu{{ $index }}">
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
       <li>
-        <a class="pointer" role="menuitem" tabindex="1" ng-click="panel.highlight = true">Select Panel {{ $index + 1 }}</a>
+        <a class="pointer" role="menuitem" tabindex="1"
+           ng-click="panel.highlight = true">Select Panel {{ $index + 1 }}</a>
       </li>
       <li>
-        <a class="pointer" role="menuitem" tabindex="2" ng-click="panel.highlight = false">Deselect Panel  {{ $index + 1 }}</a>
+        <a class="pointer" role="menuitem" tabindex="2"
+           ng-click="panel.highlight = false">
+           Deselect Panel  {{ $index + 1 }}
+        </a>
       </li>
       <li>
-        <a class="pointer" role="menuitem" tabindex="3" ng-click="panel.expanded = true">Expand Panel {{ $index + 1 }}</a>
+        <a class="pointer" role="menuitem" tabindex="3"
+           ng-click="panel.expanded = true">Expand Panel {{ $index + 1 }}</a>
       </li>
       <li>
-        <a class="pointer" role="menuitem" tabindex="4" ng-click="panel.expanded = false">Contract Panel {{ $index + 1 }}</a>
+        <a class="pointer" role="menuitem" tabindex="4"
+           ng-click="panel.expanded = false">
+           Contract Panel {{ $index + 1 }}
+        </a>
       </li>
       <li>
-        <a class="pointer" role="menuitem" tabindex="5" ng-click="addPanel()">Add a panel</a>
+        <a class="pointer" role="menuitem" tabindex="5"
+           ng-click="addPanel()">Add a panel</a>
       </li>
       <li>
-        <a href="https://github.com/ianwalter/ng-context-menu" role="menuitem" tabindex="-1">ng-context-menu on GitHub</a>
+        <a href="https://github.com/ianwalter/ng-context-menu" role="menuitem"
+           tabindex="-1">ng-context-menu on GitHub</a>
       </li>
     </ul>
   </div>
 </div>
-<br>
-<p>
-<button class="btn btn-default" ng-click="recreatePanels()">Recreate Panels</button>
-</p>
