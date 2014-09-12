@@ -75,6 +75,8 @@ angular
               event.stopPropagation();
               $scope.$apply(function() {
                 $scope.callback({ $event: event });
+              });
+              $scope.$apply(function() {
                 open(event, ContextMenuService.menuElement);
               });
             }
