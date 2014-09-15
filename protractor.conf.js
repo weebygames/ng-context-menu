@@ -8,8 +8,8 @@ exports.config = {
   capabilities: {
     //'browserName': 'phantomjs', // Can't use phantomjs until this is fixed
     // https://github.com/detro/ghostdriver/issues/125
-    //'browserName': 'firefox',
-    'browserName': 'chrome'
+    'browserName': 'firefox'
+    //'browserName': 'chrome'
   },
   specs: ['test/ui/**/*.spec.js']
 };
