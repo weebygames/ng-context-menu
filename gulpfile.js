@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
+    protractor = require("gulp-protractor").protractor,
     debug = false;
 
 gulp.task('lint', function () {
@@ -36,6 +37,16 @@ gulp.task('connect', function() {
   });
 });
 
+gulp.task('protractor', function(done) {
+  gulp.src(["./src/tests/*.js"])
+    .pipe(protractor({
+      configFile: 'protractor.conf.js',
+      args: ['--baseUrl', 'http://127.0.0.1:8080']
+    }))
+    .on('end', function() { done(); })
+    .on('error', function() { done(); });
+});
+
 gulp.task('debug', function() {
   debug = true;
 });
@@ -50,6 +61,6 @@ function build() {
   jsWatcher.on('change', changeNotification);
 }
 
-gulp.task('default', ['js', 'lint'], build);
+gulp.task('default', ['js', 'lint', 'protractor'], build);
 
 gulp.task('server', ['connect', 'default']);

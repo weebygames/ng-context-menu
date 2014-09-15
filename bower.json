@@ -29,5 +29,8 @@
   ],
   "dependencies": {
     "angular": ">= 1.2.5"
+  },
+  "devDependencies": {
+    "requirejs": "~2.1.15"
   }
 }
