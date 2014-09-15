@@ -71,6 +71,8 @@ function watch() {
   jsWatcher.on('change', changeNotification);
 }
 
-gulp.task('default', ['watch-mode', 'js', 'lint', 'protractor'], watch);
+// Removing protractor from default task until phantomjs issue is fixed
+//gulp.task('default', ['watch-mode', 'js', 'lint', 'protractor'], watch);
+gulp.task('default', ['watch-mode', 'js', 'lint'], watch);
 gulp.task('server', ['connect', 'default']);
 gulp.task('test', ['connect', 'protractor']);

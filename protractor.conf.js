@@ -3,10 +3,14 @@ var gulpSelenium = GulpSelenium();
 
 exports.config = {
   seleniumServerJar: gulpSelenium.path,
+  chromeDriver: gulpSelenium.chromeDriverPath,
   //seleniumAddress: 'http://localhost:4444/wd/hub', // Using JAR instead of address
   capabilities: {
-    //'browserName': 'phantomjs'
-    'browserName': 'firefox'
+    //'browserName': 'phantomjs', // Can't use phantomjs until this is fixed
+    // https://github.com/detro/ghostdriver/issues/125
+    //'browserName': 'firefox',
   },
   specs: ['test/ui/**/*.spec.js']
 };
+
+console.log(gulpSelenium.chromeDriverPath);

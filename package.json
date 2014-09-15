@@ -1,6 +1,6 @@
 {
   "name": "ng-context-menu",
-  "version": "0.1.7",
+  "version": "1.0.0",
   "description": "An AngularJS directive to display a context menu when a right-click event is triggered",
   "main": "index.html",
   "devDependencies": {
@@ -12,7 +12,7 @@
     "gulp-uglify": "~0.2.0",
     "protractor": "^1.2.0",
     "gulp-protractor": "0.0.11",
-    "gulp-selenium": "0.0.2"
+    "gulp-selenium": "0.0.3"
   },
   "scripts": {
     "test": "gulp test"
