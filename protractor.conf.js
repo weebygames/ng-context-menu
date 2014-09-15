@@ -5,7 +5,8 @@ exports.config = {
   seleniumServerJar: gulpSelenium.path,
   //seleniumAddress: 'http://localhost:4444/wd/hub', // Using JAR instead of address
   capabilities: {
-    'browserName': 'phantomjs'
+    //'browserName': 'phantomjs'
+    'browserName': 'firefox'
   },
   specs: ['test/ui/**/*.spec.js']
 };

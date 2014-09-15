@@ -5,7 +5,11 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
     protractor = require("gulp-protractor").protractor,
-    debug = false;
+    debug = false,
+    WATCH_MODE = 'watch',
+    RUN_MODE = 'run';
+
+var mode = RUN_MODE;
 
 gulp.task('lint', function () {
   gulp.src('src/**/*.js')
@@ -27,13 +31,15 @@ gulp.task('js', function() {
 });
 
 gulp.task('connect', function() {
-  gulp.watch(['index.html'], function() {
-    gulp.src(['index.html'])
-      .pipe(connect.reload());
-  });
+  if (mode === WATCH_MODE) {
+    gulp.watch(['index.html'], function() {
+      gulp.src(['index.html'])
+        .pipe(connect.reload());
+    });
+  }
 
   connect.server({
-    livereload: true
+    livereload: mode === WATCH_MODE
   });
 });
 
@@ -43,7 +49,7 @@ gulp.task('protractor', function(done) {
       configFile: 'protractor.conf.js',
       args: ['--baseUrl', 'http://127.0.0.1:8080']
     }))
-    .on('end', function() { done(); })
+    .on('end', function() { connect.serverClose(); done(); })
     .on('error', function() { done(); });
 });
 
@@ -51,16 +57,20 @@ gulp.task('debug', function() {
   debug = true;
 });
 
-function changeNotification(event) {
-  console.log('File', event.path, 'was', event.type, ', running tasks...');
-}
+gulp.task('watch-mode', function() {
+  mode = WATCH_MODE;
+});
 
-function build() {
+function watch() {
   var jsWatcher = gulp.watch('src/**/*.js', ['js', 'lint']);
+
+  function changeNotification(event) {
+    console.log('File', event.path, 'was', event.type, ', running tasks...');
+  }
 
   jsWatcher.on('change', changeNotification);
 }
 
-gulp.task('default', ['js', 'lint', 'protractor'], build);
-
+gulp.task('default', ['watch-mode', 'js', 'lint', 'protractor'], watch);
 gulp.task('server', ['connect', 'default']);
+gulp.task('test', ['connect', 'protractor']);
