@@ -39,6 +39,7 @@ require(['angular', 'angular-route', 'ng-context-menu'], function(angular) {
     '$scope',
     function($scope) {
       $scope.message  = 'Right click triggered';
+      $scope.closeMessage = 'Context menu closed';
 
       $scope.panels = [
         { name: 'Panel 1' },
@@ -51,6 +52,10 @@ require(['angular', 'angular-route', 'ng-context-menu'], function(angular) {
       };
 
       $scope.onRightClick = function(msg) {
+        console.log(msg);
+      };
+
+      $scope.onClose = function (msg) {
         console.log(msg);
       };
 
