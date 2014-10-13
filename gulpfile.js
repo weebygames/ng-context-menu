@@ -5,16 +5,29 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
     protractor = require("gulp-protractor").protractor,
+    program = require('commander'),
+    stylish = require('jshint-stylish'),
     debug = false,
     WATCH_MODE = 'watch',
     RUN_MODE = 'run';
 
 var mode = RUN_MODE;
 
+function list(val) {
+  return val.split(',');
+}
+
+program
+  .version('0.0.1')
+  .option('-t, --tests [glob]', 'Specify which tests to run')
+  .option('-b, --browsers <items>', 'Specify which browsers to run on', list)
+  .option('-r, --reporters <items>', 'Specify which reporters to use', list)
+  .parse(process.argv);
+
 gulp.task('lint', function () {
   gulp.src('src/**/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter(stylish));
 });
 
 gulp.task('js', function() {
@@ -47,7 +60,10 @@ gulp.task('protractor', function(done) {
   gulp.src(["./src/tests/*.js"])
     .pipe(protractor({
       configFile: 'protractor.conf.js',
-      args: ['--baseUrl', 'http://127.0.0.1:8080']
+      args: [
+        '--baseUrl', 'http://127.0.0.1:8080',
+        '--browser', program.browsers ? program.browsers[0] : 'phantomjs'
+      ]
     }))
     .on('end', function() {
       if (mode === RUN_MODE) {
@@ -82,6 +98,7 @@ function watch() {
 }
 
 // Removing protractor from default task until phantomjs issue is fixed
+// https://github.com/ariya/phantomjs/issues/11429
 //gulp.task('default', ['watch-mode', 'js', 'lint', 'protractor'], watch);
 gulp.task('default', ['watch-mode', 'js', 'lint'], watch);
 gulp.task('server', ['connect', 'default']);
