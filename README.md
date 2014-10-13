@@ -96,8 +96,6 @@ If you need to disable the contextmenu in certain circumstances, you can add an 
  ```context-menu-disabled``` attribute. If the expression evaluates to true, the contextmenu will be
  disabled, for example, ```context-menu-disabled="1 === 1"```
 
-That's it, I hope you find this useful!
-
 #### Open callback
 
 You can add a callback function to the `context-menu` property which will be 
