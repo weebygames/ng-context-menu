@@ -7,6 +7,8 @@
 
 This project was built using [ng-boilerplate](https://github.com/ianwalter/ng-boilerplate)!
 
+### Implementation steps
+
 #### Step 1: Install ng-context-menu
 
 Install using Bower:
@@ -90,6 +92,11 @@ As you can see in the demo, I just created a class called position-fixed and add
 }
 ```
 
+---
+
+### Options
+---
+
 #### Disabling the contextmenu
 
 If you need to disable the contextmenu in certain circumstances, you can add an expression to the
@@ -98,7 +105,7 @@ If you need to disable the contextmenu in certain circumstances, you can add an 
 
 #### Open callback
 
-You can add a callback function to the `context-menu` property which will be 
+You can add a callback function to the `context-menu` property which will be
 called when the menu is opened:
 
 ```html
@@ -117,6 +124,8 @@ that will be called whenever the context menu is closed.
 <!-- ... -->
 </div>
 ```
+
+---
 
 I hope you find this useful!  
 ⌁ [Ian](http://ianvonwalter.com)
