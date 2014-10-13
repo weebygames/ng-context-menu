@@ -20,7 +20,8 @@ angular
         restrict: 'A',
         scope: {
           'callback': '&contextMenu',
-          'disabled': '&contextMenuDisabled'
+          'disabled': '&contextMenuDisabled',
+          'closeCallback': '&contextMenuClose'
         },
         link: function($scope, $element, $attrs) {
           var opened = false;
@@ -57,6 +58,11 @@ angular
 
           function close(menuElement) {
             menuElement.removeClass('open');
+
+            if (opened) {
+              $scope.closeCallback();
+            }
+
             opened = false;
           }
 

@@ -13,5 +13,3 @@ exports.config = {
   },
   specs: ['test/ui/**/*.spec.js']
 };
-
-console.log(gulpSelenium.chromeDriverPath);
