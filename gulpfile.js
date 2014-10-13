@@ -49,7 +49,12 @@ gulp.task('protractor', function(done) {
       configFile: 'protractor.conf.js',
       args: ['--baseUrl', 'http://127.0.0.1:8080']
     }))
-    .on('end', function() { connect.serverClose(); done(); })
+    .on('end', function() {
+      if (mode === RUN_MODE) {
+        connect.serverClose();
+      }
+      done();
+    })
     .on('error', function() { done(); });
 });
 
