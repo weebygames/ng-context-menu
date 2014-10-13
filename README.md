@@ -98,13 +98,27 @@ If you need to disable the contextmenu in certain circumstances, you can add an 
 
 That's it, I hope you find this useful!
 
-#### `close` Callback
+#### Open callback
+
+You can add a callback function to the `context-menu` property which will be 
+called when the menu is opened:
+
+```html
+<div context-menu="onShow()">
+<!-- ... -->
+</div>
+```
+
+#### Close callback
 
 Add the following attribute to the `context-menu` element: `context-menu-close` which should be a function
 that will be called whenever the context menu is closed.
 
 ```html
-<div context-menu="onShow()" context-menu-close="onClose()"></div>
+<div context-menu context-menu-close="onClose()">
+<!-- ... -->
+</div>
 ```
 
-«–– [Ian](http://ianvonwalter.com)
+I hope you find this useful!  
+⌁ [Ian](http://ianvonwalter.com)
