@@ -7,6 +7,8 @@
 
 This project was built using [ng-boilerplate](https://github.com/ianwalter/ng-boilerplate)!
 
+---
+
 ### Implementation steps
 
 #### Step 1: Install ng-context-menu
@@ -95,7 +97,6 @@ As you can see in the demo, I just created a class called position-fixed and add
 ---
 
 ### Options
----
 
 #### Disabling the contextmenu
 
