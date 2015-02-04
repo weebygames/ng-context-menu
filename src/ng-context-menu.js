@@ -29,9 +29,7 @@
           link: function($scope, $element, $attrs) {
             var opened = false;
 
-            function open(event, menuElement) {
-              menuElement.addClass('open');
-
+            function openFromMouse(event, menuElement) {
               var doc = $document[0].documentElement;
               var docLeft = (window.pageXOffset || doc.scrollLeft) -
                   (doc.clientLeft || 0),
@@ -54,6 +52,18 @@
                 top = top - (totalHeight - docHeight);
               }
 
+              openAt(top, left, menuElement);
+            }
+
+            function openOn(domElement) {
+              var bounds = domElement.getBoundingClientRect();
+              var left = bounds.right;
+              var top = bounds.top - (0.5 * bounds.height);
+              openAt(top, left, ContextMenuService.menuElement);
+            }
+
+            function openAt(top, left, menuElement) {
+              menuElement.addClass('open');
               menuElement.css('top', top + 'px');
               menuElement.css('left', left + 'px');
               opened = true;
@@ -86,7 +96,7 @@
                   $scope.callback({ $event: event });
                 });
                 $scope.$apply(function() {
-                  open(event, ContextMenuService.menuElement);
+                  openFromMouse(event, ContextMenuService.menuElement);
                 });
               }
             });
