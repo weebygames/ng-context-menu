@@ -70,7 +70,9 @@
             }
 
             function close(menuElement) {
-              menuElement.removeClass('open');
+              if (menuElement) {
+                menuElement.removeClass('open');
+              }
 
               if (opened) {
                 $scope.closeCallback();
@@ -81,9 +83,9 @@
 
             $element.bind('contextmenu', function(event) {
               if (!$scope.disabled()) {
-                if (ContextMenuService.menuElement !== null) {
-                  close(ContextMenuService.menuElement);
-                }
+
+                close(ContextMenuService.menuElement);
+
                 ContextMenuService.menuElement = angular.element(
                   document.getElementById($attrs.target)
                 );
@@ -129,6 +131,12 @@
 
             $scope.$on('$destroy', function() {
               //console.log('destroy');
+
+              // Stop showing the menu
+              var el = ContextMenuService.menuElement;
+              if (el) {
+                el.removeClass('open');
+              }
               $document.unbind('keyup', handleKeyUpEvent);
               $document.unbind('click', handleClickEvent);
               $document.unbind('contextmenu', handleClickEvent);
