@@ -29,6 +29,8 @@
           link: function($scope, $element, $attrs) {
             var opened = false;
 
+            $scope.leftClick = $attrs.contextMenuLeftClick;
+
             function openFromMouse(event, menuElement) {
               var doc = $document[0].documentElement;
               var docLeft = (window.pageXOffset || doc.scrollLeft) -
@@ -104,7 +106,11 @@
               }
             }
 
-            $element.bind('contextmenu', bindContextMenuFunction);
+            var eventToBind = 'contextmenu';
+            if ($scope.leftClick) {
+              eventToBind = 'click';
+            }
+            $element.bind(eventToBind, bindContextMenuFunction);
 
             function handleKeyUpEvent(event) {
               //console.log('keyup');
