@@ -81,14 +81,15 @@
               opened = false;
             }
 
-            $element.bind('contextmenu', function(event) {
+            function bindContextMenuFunction(event) {
               if (!$scope.disabled()) {
 
                 close(ContextMenuService.menuElement);
 
-                ContextMenuService.menuElement = angular.element(
+                var el = angular.element(
                   document.getElementById($attrs.target)
                 );
+                ContextMenuService.menuElement = el;
                 ContextMenuService.element = event.target;
                 //console.log('set', ContextMenuService.element);
 
@@ -101,7 +102,9 @@
                   openFromMouse(event, ContextMenuService.menuElement);
                 });
               }
-            });
+            }
+
+            $element.bind('contextmenu', bindContextMenuFunction);
 
             function handleKeyUpEvent(event) {
               //console.log('keyup');
