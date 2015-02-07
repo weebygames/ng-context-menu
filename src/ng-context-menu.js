@@ -24,7 +24,8 @@
           scope: {
             'callback': '&contextMenu',
             'disabled': '&contextMenuDisabled',
-            'closeCallback': '&contextMenuClose'
+            'closeCallback': '&contextMenuClose',
+            'treeNode': '=contextMenuTreeNode'
           },
           link: function($scope, $element, $attrs) {
             var opened = false;
@@ -54,27 +55,26 @@
                 top = top - (totalHeight - docHeight);
               }
 
-              openAt(top, left, menuElement);
+              openAt(top, left);
             }
 
             function openOn(domElement) {
+              console.log('openOn: ', domElement);
               var bounds = domElement.getBoundingClientRect();
               var left = bounds.right;
               var top = bounds.top - (0.5 * bounds.height);
-              openAt(top, left, ContextMenuService.menuElement);
+              openAt(top, left);
             }
 
-            function openAt(top, left, menuElement) {
-              menuElement.addClass('open');
-              menuElement.css('top', top + 'px');
-              menuElement.css('left', left + 'px');
+            function openAt(top, left) {
+              ContextMenuService.menuElement.addClass('open');
+              ContextMenuService.menuElement.css('top', top + 'px');
+              ContextMenuService.menuElement.css('left', left + 'px');
               opened = true;
             }
 
-            function close(menuElement) {
-              if (menuElement) {
-                menuElement.removeClass('open');
-              }
+            function close() {
+              ContextMenuService.menuElement.removeClass('open');
 
               if (opened) {
                 $scope.closeCallback();
@@ -83,15 +83,21 @@
               opened = false;
             }
 
+            if($scope.treeNode) {
+              $scope.treeNode.contextMenuFunctions = {};
+              $scope.treeNode.contextMenuFunctions.openOn = openOn;
+              $scope.treeNode.contextMenuFunctions.openAt = openAt;
+              $scope.treeNode.contextMenuFunctions.close = close;
+            }
+            else {
+              console.warn('no scope.treeNode object');
+            }
+
             function bindContextMenuFunction(event) {
               if (!$scope.disabled()) {
 
                 close(ContextMenuService.menuElement);
 
-                var el = angular.element(
-                  document.getElementById($attrs.target)
-                );
-                ContextMenuService.menuElement = el;
                 ContextMenuService.element = event.target;
                 //console.log('set', ContextMenuService.element);
 
@@ -131,6 +137,11 @@
                 });
               }
             }
+
+            // TODO $timeout
+            setTimeout(function(){
+              ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
+            });
 
             $document.bind('keyup', handleKeyUpEvent);
             // Firefox treats a right-click as a click and a contextmenu event
