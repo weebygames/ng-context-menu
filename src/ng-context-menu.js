@@ -52,27 +52,6 @@
               if (!menuElement) {
                 menuElement = getMenu();
               }
-              var doc = $document[0].documentElement;
-              var docLeft = (window.pageXOffset || doc.scrollLeft) -
-                  (doc.clientLeft || 0),
-                docTop = (window.pageYOffset || doc.scrollTop) -
-                  (doc.clientTop || 0),
-                elementWidth = menuElement[0].scrollWidth,
-                elementHeight = menuElement[0].scrollHeight;
-              var docWidth = doc.clientWidth + docLeft,
-                docHeight = doc.clientHeight + docTop,
-                totalWidth = elementWidth + event.pageX,
-                totalHeight = elementHeight + event.pageY,
-                left = Math.max(event.pageX - docLeft, 0),
-                top = Math.max(event.pageY - docTop, 0);
-
-              if (totalWidth > docWidth) {
-                left = left - (totalWidth - docWidth);
-              }
-
-              if (totalHeight > docHeight) {
-                top = top - (totalHeight - docHeight);
-              }
 
               openAt(top, left);
             }
@@ -96,8 +75,30 @@
                 m.removeClass('open');
               }
 
-              // Open the right one
+              // Open the menu so we can measure its width/height
               toOpen.addClass('open');
+
+              // Make sure the menu isn't rendering off-screen
+              var doc = $document[0].documentElement;
+              var docLeft = (window.pageXOffset || doc.scrollLeft) -
+                  (doc.clientLeft || 0),
+                docTop = (window.pageYOffset || doc.scrollTop) -
+                  (doc.clientTop || 0),
+                elementWidth = toOpen[0].scrollWidth,
+                elementHeight = toOpen[0].scrollHeight;
+              var docWidth = doc.clientWidth + docLeft,
+                docHeight = doc.clientHeight + docTop,
+                totalWidth = elementWidth + event.pageX,
+                totalHeight = elementHeight + event.pageY;
+
+              if (totalWidth > docWidth) {
+                left = left - (totalWidth - docWidth);
+              }
+
+              if (totalHeight > docHeight) {
+                top = top - (totalHeight - docHeight);
+              }
+
               toOpen.css('top', top + 'px');
               toOpen.css('left', left + 'px');
 
