@@ -12,7 +12,7 @@
     .factory('ContextMenuService', function() {
       return {
         element: null,
-        menuElement: null
+        menus: {}
       };
     })
     .directive('contextMenu', [
@@ -32,7 +32,26 @@
 
             $scope.leftClick = $attrs.contextMenuLeftClick;
 
+            var targetMenu = angular.element(
+              document.getElementById($attrs.target)
+            );
+            ContextMenuService.menus[$attrs.target] = targetMenu;
+
+            function getMenu() {
+              var menu = ContextMenuService.menus[$attrs.target];
+              if (menu) {
+                return menu;
+              }
+
+              console.error('No menu at target: ', $attrs.target);
+
+              return null;
+            }
+
             function openFromMouse(event, menuElement) {
+              if (!menuElement) {
+                menuElement = getMenu();
+              }
               var doc = $document[0].documentElement;
               var docLeft = (window.pageXOffset || doc.scrollLeft) -
                   (doc.clientLeft || 0),
@@ -59,7 +78,6 @@
             }
 
             function openOn(domElement) {
-              console.log('openOn: ', domElement);
               var bounds = domElement.getBoundingClientRect();
               var left = bounds.right;
               var top = bounds.top - (0.5 * bounds.height);
@@ -67,14 +85,18 @@
             }
 
             function openAt(top, left) {
-              ContextMenuService.menuElement.addClass('open');
-              ContextMenuService.menuElement.css('top', top + 'px');
-              ContextMenuService.menuElement.css('left', left + 'px');
+              getMenu().addClass('open');
+              getMenu().css('top', top + 'px');
+              getMenu().css('left', left + 'px');
               opened = true;
             }
 
             function close() {
-              ContextMenuService.menuElement.removeClass('open');
+
+              // Close all the menus!
+              for (var menu in ContextMenuService.menus) {
+                ContextMenuService.menus[menu].removeClass('open');
+              }
 
               if (opened) {
                 $scope.closeCallback();
@@ -96,10 +118,9 @@
             function bindContextMenuFunction(event) {
               if (!$scope.disabled()) {
 
-                close(ContextMenuService.menuElement);
+                close();
 
                 ContextMenuService.element = event.target;
-                //console.log('set', ContextMenuService.element);
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -107,7 +128,7 @@
                   $scope.callback({ $event: event });
                 });
                 $scope.$apply(function() {
-                  openFromMouse(event, ContextMenuService.menuElement);
+                  openFromMouse(event);
                 });
               }
             }
@@ -122,7 +143,7 @@
               //console.log('keyup');
               if (!$scope.disabled() && opened && event.keyCode === 27) {
                 $scope.$apply(function() {
-                  close(ContextMenuService.menuElement);
+                  close();
                 });
               }
             }
@@ -133,15 +154,10 @@
                 (event.button !== 2 ||
                   event.target !== ContextMenuService.element)) {
                 $scope.$apply(function() {
-                  close(ContextMenuService.menuElement);
+                  close();
                 });
               }
             }
-
-            // TODO $timeout
-            setTimeout(function(){
-              ContextMenuService.menuElement = angular.element(document.getElementById($attrs.target));
-            });
 
             $document.bind('keyup', handleKeyUpEvent);
             // Firefox treats a right-click as a click and a contextmenu event
@@ -152,11 +168,9 @@
             $scope.$on('$destroy', function() {
               //console.log('destroy');
 
-              // Stop showing the menu
-              var el = ContextMenuService.menuElement;
-              if (el) {
-                el.removeClass('open');
-              }
+              // Stop showing the menu(s)
+              close();
+
               $document.unbind('keyup', handleKeyUpEvent);
               $document.unbind('click', handleClickEvent);
               $document.unbind('contextmenu', handleClickEvent);
