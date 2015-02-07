@@ -85,9 +85,22 @@
             }
 
             function openAt(top, left) {
-              getMenu().addClass('open');
-              getMenu().css('top', top + 'px');
-              getMenu().css('left', left + 'px');
+              var toOpen = getMenu();
+
+              // Close all the other menus
+              for (var menu in ContextMenuService.menus) {
+                var m = ContextMenuService.menus[menu];
+                if (m === toOpen) {
+                  continue;
+                }
+                m.removeClass('open');
+              }
+
+              // Open the right one
+              toOpen.addClass('open');
+              toOpen.css('top', top + 'px');
+              toOpen.css('left', left + 'px');
+
               opened = true;
             }
 
