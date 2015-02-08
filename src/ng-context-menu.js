@@ -53,13 +53,31 @@
                 menuElement = getMenu();
               }
 
+              var left = event.pageX;
+              var top = event.pageY;
               openAt(top, left);
             }
 
-            function openOn(domElement) {
+            function openOn(domElement, position) {
               var bounds = domElement.getBoundingClientRect();
               var left = bounds.right;
               var top = bounds.top - (0.5 * bounds.height);
+
+              if (position && typeof position === 'string') {
+                if (position.indexOf('bottom') > -1) {
+                  top = bounds.bottom;
+                }
+                else if (position.indexOf('top') > -1) {
+                  top = bounds.top;
+                }
+
+                if (position.indexOf('left') > -1) {
+                  left = bounds.left;
+                }
+                else if (position.indexOf('right') > -1) {
+                  left = bounds.right;
+                }
+              }
               openAt(top, left);
             }
 
@@ -92,11 +110,11 @@
                 totalHeight = elementHeight + event.pageY;
 
               if (totalWidth > docWidth) {
-                left = left - (totalWidth - docWidth);
+                left = window.innerWidth - toOpen[0].scrollWidth;
               }
 
               if (totalHeight > docHeight) {
-                top = top - (totalHeight - docHeight);
+                top = window.innerHeight - toOpen[0].scrollHeight;
               }
 
               toOpen.css('top', top + 'px');
@@ -154,7 +172,6 @@
             $element.bind(eventToBind, bindContextMenuFunction);
 
             function handleKeyUpEvent(event) {
-              //console.log('keyup');
               if (!$scope.disabled() && opened && event.keyCode === 27) {
                 $scope.$apply(function() {
                   close();
@@ -180,7 +197,6 @@
             $document.bind('contextmenu', handleClickEvent);
 
             $scope.$on('$destroy', function() {
-              //console.log('destroy');
 
               // Stop showing the menu(s)
               close();
