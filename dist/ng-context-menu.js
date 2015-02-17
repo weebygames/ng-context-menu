@@ -89,11 +89,6 @@
             function openAt(top, left) {
               var toOpen = getMenu();
 
-              if (isLumxDropdown) {
-                var targScope = angular.element(toOpen).scope();
-                targScope.isOpened = true;
-              }
-
               // Close all the other menus
               for (var menu in ContextMenuService.menus) {
                 var m = ContextMenuService.menus[menu];
@@ -131,6 +126,11 @@
               toOpen.css('left', left + 'px');
 
               opened = true;
+
+              if (isLumxDropdown) {
+                var targScope = angular.element(toOpen).scope();
+                targScope.isOpened = true;
+              }
             }
 
             function close() {
