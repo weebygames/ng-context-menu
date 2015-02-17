@@ -25,10 +25,12 @@
             'callback': '&contextMenu',
             'disabled': '&contextMenuDisabled',
             'closeCallback': '&contextMenuClose',
-            'treeNode': '=contextMenuTreeNode'
+            'treeNode': '=contextMenuTreeNode',
+            'isLumxDropdown': '&'
           },
           link: function($scope, $element, $attrs) {
             var opened = false;
+            var isLumxDropdown = $attrs.isLumxDropdown == 'true';
 
             $scope.leftClick = $attrs.contextMenuLeftClick;
 
@@ -38,14 +40,17 @@
             ContextMenuService.menus[$attrs.target] = targetMenu;
 
             function getMenu() {
-              var menu = ContextMenuService.menus[$attrs.target];
-              if (menu) {
-                return menu;
+              if (isLumxDropdown) {
+                return $(document.getElementById($attrs.target));
+              } else {
+                var menu = ContextMenuService.menus[$attrs.target];
+                if (menu) {
+                  return menu;
+                }
+
+                console.error('No menu at target: ', $attrs.target);
+                return null;
               }
-
-              console.error('No menu at target: ', $attrs.target);
-
-              return null;
             }
 
             function openFromMouse(event, menuElement) {
@@ -83,6 +88,11 @@
 
             function openAt(top, left) {
               var toOpen = getMenu();
+
+              if (isLumxDropdown) {
+                var targScope = angular.element(toOpen).scope();
+                targScope.isOpened = true;
+              }
 
               // Close all the other menus
               for (var menu in ContextMenuService.menus) {
