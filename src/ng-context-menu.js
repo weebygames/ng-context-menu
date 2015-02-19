@@ -9,16 +9,9 @@
 
   angular
     .module('ng-context-menu', [])
-    .factory('ContextMenuService', function() {
-      return {
-        element: null,
-        menus: {}
-      };
-    })
     .directive('contextMenu', [
       '$document',
-      'ContextMenuService',
-      function($document, ContextMenuService) {
+      function($document) {
         return {
           restrict: 'A',
           scope: {
@@ -34,23 +27,8 @@
 
             $scope.leftClick = $attrs.contextMenuLeftClick;
 
-            var targetMenu = angular.element(
-              document.getElementById($attrs.target)
-            );
-            ContextMenuService.menus[$attrs.target] = targetMenu;
-
             function getMenu() {
-              if (isLumxDropdown) {
-                return $(document.getElementById($attrs.target));
-              } else {
-                var menu = ContextMenuService.menus[$attrs.target];
-                if (menu) {
-                  return menu;
-                }
-
-                console.error('No menu at target: ', $attrs.target);
-                return null;
-              }
+              return $(document.getElementById($attrs.target));
             }
 
             function openFromMouse(event, menuElement) {
@@ -89,15 +67,6 @@
             function openAt(top, left) {
               var toOpen = getMenu();
 
-              // Close all the other menus
-              for (var menu in ContextMenuService.menus) {
-                var m = ContextMenuService.menus[menu];
-                if (m === toOpen) {
-                  continue;
-                }
-                m.removeClass('open');
-              }
-
               // Open the menu so we can measure its width/height
               toOpen.addClass('open');
 
@@ -134,12 +103,6 @@
             }
 
             function close() {
-
-              // Close all the menus!
-              for (var menu in ContextMenuService.menus) {
-                ContextMenuService.menus[menu].removeClass('open');
-              }
-
               if (opened) {
                 $scope.closeCallback();
               }
@@ -162,23 +125,16 @@
 
                 close();
 
-                ContextMenuService.element = event.target;
-
                 event.preventDefault();
                 event.stopPropagation();
                 $scope.$apply(function() {
                   $scope.callback({ $event: event });
-                });
-                $scope.$apply(function() {
                   openFromMouse(event);
                 });
               }
             }
 
-            var eventToBind = 'contextmenu';
-            if ($scope.leftClick) {
-              eventToBind = 'click';
-            }
+            var eventToBind = $scope.leftClick ? 'click' : 'contextmenu';
             $element.bind(eventToBind, bindContextMenuFunction);
 
             function handleKeyUpEvent(event) {
@@ -193,7 +149,7 @@
               if (!$scope.disabled() &&
                 opened &&
                 (event.button !== 2 ||
-                  event.target !== ContextMenuService.element)) {
+                  event.target !== $element)) {
                 $scope.$apply(function() {
                   close();
                 });
