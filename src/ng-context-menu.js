@@ -64,9 +64,8 @@
               openAt(top, left);
             }
 
-            function openAt(top, left) {
+            function _doOpen(top, left) {
               var toOpen = getMenu();
-
               // Open the menu so we can measure its width/height
               toOpen.addClass('open');
 
@@ -80,8 +79,8 @@
                 elementHeight = toOpen[0].scrollHeight;
               var docWidth = doc.clientWidth + docLeft,
                 docHeight = doc.clientHeight + docTop,
-                totalWidth = elementWidth + event.pageX,
-                totalHeight = elementHeight + event.pageY;
+                totalWidth = elementWidth + left,
+                totalHeight = elementHeight + top;
 
               if (totalWidth > docWidth) {
                 left = window.innerWidth - toOpen[0].scrollWidth;
@@ -100,6 +99,25 @@
                 var targScope = angular.element(toOpen).scope();
                 targScope.isOpened = true;
               }
+            }
+
+            function openAt(top, left) {
+              var toOpen = getMenu();
+              var targScope = null;
+
+              // Close the menu (if it's already open)
+              if (isLumxDropdown) {
+                targScope = angular.element(toOpen).scope();
+                if (targScope.isOpened) {
+                  targScope.isOpened = false;
+
+                  // Need to do the rest in a setTimeout to allow the lumx stuff
+                  // to animate the closing
+                  setTimeout(function(){ _doOpen(top, left); $scope.$apply(); }, 350);
+                  return;
+                }
+              }
+              _doOpen(top, left);
             }
 
             function close() {
